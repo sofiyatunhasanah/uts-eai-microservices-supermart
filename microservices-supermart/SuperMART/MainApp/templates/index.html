@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supermart</title>
+  <style>
+    /* Warna dan font yang lebih modern dan berwarna */
+    body {
+      font-family: "Poppins", sans-serif;
+      /* Font yang lebih modern */
+      background-color: #e0e0e0;
+      /* Warna latar yang lebih cerah */
+    }
+
+    .container {
+      background-color: #ffffff;
+      /* Warna latar belakang container */
+      border-radius: 12px;
+      /* Border radius yang lebih besar */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      /* Bayangan yang lebih halus */
+    }
+
+    .title {
+      color: #2c3e50;
+      /* Warna teks judul yang lebih dalam */
+      font-size: 36px;
+      /* Ukuran font yang lebih besar */
+      text-align: center;
+      /* Menengahkan teks */
+      margin-top: 20px;
+      /* Memberi jarak atas */
+      margin-bottom: 20px;
+      /* Memberi jarak bawah */
+    }
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .category-btn {
+      font-size: 20px;
+      /* Ukuran font tombol kategori */
+      padding: 12px 24px;
+      /* Padding tombol kategori */
+      margin: 0 10px;
+      background-color: #3498db;
+      /* Warna tombol yang lebih cerah */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      /* Radius yang lebih besar */
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s ease;
+      /* Animasi transform */
+    }
+
+    .category-btn:hover {
+      background-color: #2980b9;
+      /* Warna saat hover */
+      transform: scale(1.05);
+      /* Membuat tombol sedikit lebih besar saat hover */
+    }
+
+    /* CSS untuk tabel */
+    .hidden-lines-table {
+      border-collapse: collapse;
+      margin: 20px auto;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .hidden-lines-table th,
+    .hidden-lines-table td {
+      border: none;
+      /* Hapus border seluruh sel */
+      padding: 12px;
+      text-align: center;
+    }
+
+    .hidden-lines-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+
+    .hidden-lines-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .hidden-lines-table tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    /* CSS untuk tombol pesanan */
+    .order-btn {
+      background-color: #008cba;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      outline: none;
+      font-size: 14px;
+      /* Ukuran font tombol pesanan */
+    }
+
+    .order-btn:hover {
+      background-color: #005f73;
+    }
+
+    /* CSS untuk posisi tombol pesanan */
+    .order-cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* CSS untuk tombol tutup */
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #ccc;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .close-button:hover {
+      background-color: #999;
+    }
+
+    /* CSS untuk form DETAIL PEMESAN */
+    #orderFormContainer {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #orderFormContainer h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+      /* Warna teks judul form */
+    }
+
+    #orderFormContainer label {
+      font-weight: bold;
+      color: #555;
+      /* Warna teks label */
+    }
+
+    #orderFormContainer input[type="text"],
+    #orderFormContainer textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    #orderFormContainer input[type="submit"] {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #orderFormContainer input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Responsivitas */
+    @media (max-width: 768px) {
+      .categories {
+        flex-direction: column;
+        /* Tumpuk tombol secara vertikal pada layar kecil */
+      }
+
+      .category-btn {
+        margin-bottom: 10px;
+        /* Tambahkan margin bawah */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="title">SUPERMART</h1>
+    <div class="categories">
+      <button id="clothingBtn" class="category-btn">Clothing</button>
+      <button id="electronicsBtn" class="category-btn">Electronics</button>
+      <button id="snacksBtn" class="category-btn">Snacks</button>
+    </div>
+    <div id="tableContainer"></div>
+    <div id="pesanBerhasil" style="display: none">
+      <h2>PESANAN BERHASIL DIBUAT</h2>
+      <button id="detailPesananBtn" class="category-btn">
+        Rincian Pesanan
+      </button>
+    </div>
+    <div id="orderDetailsContainer"></div>
+  </div>
+
+  <script>
+    document
+      .getElementById("clothingBtn")
+      .addEventListener("click", function () {
+        fetchDataAndDisplayClothing();
+      });
+
+    document
+      .getElementById("electronicsBtn")
+      .addEventListener("click", function () {
+        fetchDataAndDisplayElectronics();
+      });
+
+    document
+      .getElementById("snacksBtn")
+      .addEventListener("click", function () {
+        fetchDataAndDisplaySnacks();
+      });
+
+    function fetchDataAndDisplayClothing() {
+      fetch("/clothing")
+        .then((response) => response.json())
+        .then((data) => displayData(data, "clothing"))
+        .catch((error) =>
+          console.error("Error fetching clothing data:", error)
+        );
+    }
+
+    function fetchDataAndDisplayElectronics() {
+      fetch("/electronics")
+        .then((response) => response.json())
+        .then((data) => displayData(data, "electronics"))
+        .catch((error) =>
+          console.error("Error fetching electronics data:", error)
+        );
+    }
+
+    function fetchDataAndDisplaySnacks() {
+      fetch("/snacks")
+        .then((response) => response.json())
+        .then((data) => displayData(data, "snacks"))
+        .catch((error) =>
+          console.error("Error fetching snacks data:", error)
+        );
+    }
+
+    function displayData(data, category) {
+      const tableContainer = document.getElementById("tableContainer");
+      tableContainer.innerHTML = ""; // Clear previous content
+      const table = document.createElement("table");
+      table.classList.add("hidden-lines-table"); // Apply CSS class for hidden lines
+      const headerRow = table.insertRow();
+      let headers;
+      if (category === "clothing") {
+        headers = ["item_name", "description", "price", "size", "image"];
+      } else if (category === "electronics") {
+        headers = ["item_name", "description", "price", "brand", "image"];
+      } else if (category === "snacks") {
+        headers = [
+          "item_name",
+          "description",
+          "price",
+          "expiration_date",
+          "image",
+        ];
+      }
+      headers.forEach((key) => {
+        const headerCell = headerRow.insertCell();
+        if (key === "image") {
+          headerCell.textContent = "IMAGE"; // Change "IMAGE URL" to "IMAGE"
+        } else {
+          headerCell.textContent = key.replace("_", " ").toUpperCase();
+        }
+      });
+      data.forEach((item) => {
+        const row = table.insertRow();
+        headers.forEach((key) => {
+          const cell = row.insertCell();
+          if (key === "image") {
+            const img = document.createElement("img");
+            img.src = item["image_url"];
+            img.width = 100; // Adjust the image width as needed
+            cell.appendChild(img);
+          } else if (key === "price") {
+            cell.textContent = "$" + item[key]; // Add dollar sign before price
+          } else {
+            cell.textContent = item[key];
+          }
+        });
+        const orderCell = row.insertCell();
+        const orderBtn = document.createElement("button");
+        orderBtn.textContent = "Order";
+        orderBtn.className = "order-btn";
+        orderBtn.onclick = function () {
+          orderProduct(item.product_id);
+        };
+        orderCell.appendChild(orderBtn);
+      });
+      tableContainer.appendChild(table);
+    }
+
+    // Global variable to store reference to the order form element
+    let formContainer;
+    let currentProductId = null; // Variable to store the current product ID being processed
+
+    function orderProduct(productId) {
+      // Check if the order form already exists
+      const existingFormContainer =
+        document.getElementById("orderFormContainer");
+      if (existingFormContainer) {
+        // If the form exists and the same product button is pressed, toggle the form display
+        if (currentProductId === productId) {
+          existingFormContainer.style.display =
+            existingFormContainer.style.display === "none" ? "block" : "none";
+          return; // Exit the function if the same button is pressed
+        }
+        // If a different product button is pressed, remove the existing form
+        existingFormContainer.remove();
+      }
+
+      // Set the current product ID to the new product
+      currentProductId = productId;
+
+      // Create a new order form
+      formContainer = document.createElement("div");
+      formContainer.id = "orderFormContainer";
+      formContainer.style.display = "block"; // Ensure the form is visible
+      formContainer.innerHTML = `
+          <h2>DETAIL PEMESAN</h2>
+          <form id="orderForm">
+            <label for="nama">Nama:</label><br>
+            <input type="text" id="nama" name="nama" required><br>
+            <label for="noHp">No Handphone:</label><br>
+            <input type="text" id="noHp" name="noHp" required><br>
+            <label for="alamat">Alamat:</label><br>
+            <textarea id="alamat" name="alamat" required></textarea><br>
+            <input type="submit" value="Submit">
+          </form>
+        `;
+
+      // Add the form to the container
+      const container = document.querySelector(".container");
+      container.appendChild(formContainer);
+
+      // Add an event listener for form submission
+      const orderForm = document.getElementById("orderForm");
+      orderForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        submitOrderForm(productId);
+        // Hide the form after submission
+        formContainer.style.display = "none";
+      });
+    }
+
+    // Listen for click event on the "Rincian Pesanan" button
+    document
+      .getElementById("detailPesananBtn")
+      .addEventListener("click", function () {
+        // Show the order details pop-up
+        showOrderDetailsPopup();
+      });
+
+    function submitOrderForm(productId) {
+      // Get input values from the form
+      const nama = document.getElementById("nama").value;
+      const noHp = document.getElementById("noHp").value;
+      const alamat = document.getElementById("alamat").value;
+
+      // Create customer data
+      const customerData = {
+        nama: nama,
+        no_telp: noHp,
+        alamat: alamat,
+      };
+
+      // Send customer data to the /customers endpoint
+      fetch("/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(customerData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Display the "PESANAN BERHASIL DIBUAT" message
+          const pesanBerhasil = document.getElementById("pesanBerhasil");
+          pesanBerhasil.style.display = "block";
+          // Hide the form after the user submits it
+          const formContainer =
+            document.getElementById("orderForm").parentElement;
+          formContainer.style.display = "none";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Failed to add customer. Please try again.");
+        });
+    }
+
+    function hideSuccessMessageAndButton() {
+      // Hide the "PESANAN BERHASIL DIBUAT" element and the "RINCIAN PESANAN" button
+      const pesanBerhasil = document.getElementById("pesanBerhasil");
+      const detailPesananBtn = document.getElementById("detailPesananBtn");
+      pesanBerhasil.style.display = "none";
+      detailPesananBtn.style.display = "none";
+    }
+
+    function showOrderDetailsPopup() {
+      // Hide the "PESANAN BERHASIL DIBUAT" element and the "RINCIAN PESANAN" button
+      const pesanBerhasil = document.getElementById("pesanBerhasil");
+      const detailPesananBtn = document.getElementById("detailPesananBtn");
+      pesanBerhasil.style.display = "none";
+      detailPesananBtn.style.display = "none";
+
+      // Create overlay element
+      const overlay = document.createElement("div");
+      overlay.classList.add("overlay");
+
+      // Create pop-up container element
+      const popupContainer = document.createElement("div");
+      popupContainer.classList.add("popup-container");
+
+      // Send a GET request to the /detail_orders/latest endpoint to get order data
+      fetch("/detail_orders/latest")
+        .then((response) => response.json())
+        .then((data) => {
+          // Create elements to display order details
+          const orderDetailsContainer = document.createElement("div");
+          orderDetailsContainer.id = "orderDetailsPopup";
+          orderDetailsContainer.classList.add("order-details-popup");
+
+          // Display order data inside orderDetailsContainer
+          const orderId = document.createElement("p");
+          orderId.textContent = "Order ID: " + data.order_id;
+          orderDetailsContainer.appendChild(orderId);
+
+          const nama = document.createElement("p");
+          nama.textContent = "Nama: " + data.nama;
+          orderDetailsContainer.appendChild(nama);
+
+          const alamat = document.createElement("p");
+          alamat.textContent = "Alamat: " + data.alamat;
+          orderDetailsContainer.appendChild(alamat);
+
+          const noTelp = document.createElement("p");
+          noTelp.textContent = "No. Handphone: " + data.no_telp;
+          orderDetailsContainer.appendChild(noTelp);
+
+          const orderDate = document.createElement("p");
+          orderDate.textContent = "Waktu Pemesanan: " + data.order_date;
+          orderDetailsContainer.appendChild(orderDate);
+
+          // Create a button to close the pop-up
+          const closeButton = document.createElement("button");
+          closeButton.textContent = "Tutup";
+          closeButton.classList.add("close-button");
+          closeButton.addEventListener("click", function () {
+            // Remove overlay and pop-up container when the close button is pressed
+            overlay.remove();
+            popupContainer.remove();
+            // Hide the "PESANAN BERHASIL DIBUAT" element and the "RINCIAN PESANAN" button
+            pesanBerhasil.style.display = "none";
+            detailPesananBtn.style.display = "none";
+          });
+
+          // Add elements to the pop-up container
+          popupContainer.appendChild(orderDetailsContainer);
+          popupContainer.appendChild(closeButton);
+
+          // Add pop-up container and overlay to the body
+          document.body.appendChild(overlay);
+          document.body.appendChild(popupContainer);
+        })
+        .catch((error) => {
+          console.error("Error fetching order details:", error);
+          alert("Failed to fetch order details. Please try again.");
+          // Show the "PESANAN BERHASIL DIBUAT" element and the "RINCIAN PESANAN" button again after the overlay is closed
+          pesanBerhasil.style.display = "block";
+          detailPesananBtn.style.display = "block";
+        });
+    }
+  </script>
+</body>
+
+</html>
